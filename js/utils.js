@@ -17,11 +17,7 @@ function getRandomValue(arr) {
 }
 
 function getArrRandomValue(arr) {
-  const arrLength = genRandomIntFromRange(1, arr.length)
-  if (arrLength === 1) {
-    return arr[0]
-  }
-  return arr.slice(0, arrLength)
+  return arr.slice(0, genRandomIntFromRange(1, arr.length))
 }
 
 function shuffleArray(arr) {
@@ -33,15 +29,10 @@ function shuffleArray(arr) {
   return arrCopy;
 }
 
-function addLeadingZero(number, newNumberLength) {
-  return ('0'.repeat(newNumberLength) + number).slice(-newNumberLength);
-}
-
 export{
   genRandomIntFromRange,
   genRandomFloatFromRange,
   getRandomValue,
   getArrRandomValue,
-  shuffleArray,
-  addLeadingZero
+  shuffleArray
 }
