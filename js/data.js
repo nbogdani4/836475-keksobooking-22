@@ -1,12 +1,12 @@
 import {genRandomIntFromRange, genRandomFloatFromRange, getRandomValue,
-  getArrRandomValue, shuffleArray, addLeadingZero} from './utils.js'
+  getArrRandomValue, shuffleArray} from './utils.js'
 
 const TYPES = ['palace', 'flat', 'house', 'bungalow'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const TIME = ['12:00', '13:00', '14:00'];
 const AVATAR_COUNT = 8;
+const SIMILAR_AD_COUNT = 10;
 const NUMBER_COUNT_AFTER_POINT = 5;
-const NUMBER_LENGTH_WITH_LEADING_ZERO = 2;
 const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
@@ -23,8 +23,8 @@ const LOCATION = {
   },
 };
 const PRICE = {
-  'min': 50,
-  'max': 100,
+  'min': 1000,
+  'max': 10000,
 };
 const ROOMS = {
   'min': 2,
@@ -35,47 +35,34 @@ const GUESTS = {
   'max': 10,
 };
 
-function getLocationX() {
-  return genRandomFloatFromRange(LOCATION.x.min, LOCATION.x.max, NUMBER_COUNT_AFTER_POINT);
+function createAd() {
+  const locationX = genRandomFloatFromRange(LOCATION.x.min, LOCATION.x.max, NUMBER_COUNT_AFTER_POINT);
+  const locationY = genRandomFloatFromRange(LOCATION.y.min, LOCATION.y.max, NUMBER_COUNT_AFTER_POINT);
+
+  return {
+    'author': {
+      'avatar': 'img/avatars/user0'+ genRandomIntFromRange(1, AVATAR_COUNT) +'.png',
+    },
+    'offer': {
+      'title': 'Выдуманный заголовок',
+      'address': locationX + ', ' + locationY,
+      'price': genRandomIntFromRange(PRICE.min, PRICE.max),
+      'type': getRandomValue(TYPES),
+      'rooms': genRandomIntFromRange(ROOMS.min, ROOMS.max),
+      'guests': genRandomIntFromRange(GUESTS.min, GUESTS.max),
+      'checkin': getRandomValue(TIME),
+      'checkout': getRandomValue(TIME),
+      'features': getArrRandomValue(shuffleArray(FEATURES)),
+      'description': 'Текс, описывающий помещение',
+      'photos': getArrRandomValue(PHOTOS),
+    },
+    'location': {
+      'x': locationX,
+      'y': locationY,
+    },
+  };
 }
 
-function getLocationY() {
-  return genRandomFloatFromRange(LOCATION.y.min, LOCATION.y.max, NUMBER_COUNT_AFTER_POINT);
-}
+const createAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
 
-function getAvatarNumber() {
-  return addLeadingZero(genRandomIntFromRange(1, AVATAR_COUNT), NUMBER_LENGTH_WITH_LEADING_ZERO)
-}
-
-function getPrice() {
-  return genRandomIntFromRange(PRICE.min, PRICE.max)
-}
-
-function getType() {
-  return getRandomValue(TYPES)
-}
-
-function getRoomCount() {
-  return genRandomIntFromRange(ROOMS.min, ROOMS.max)
-}
-
-function getGuestCount() {
-  return genRandomIntFromRange(GUESTS.min, GUESTS.max)
-}
-
-function getCheckTime() {
-  return getRandomValue(TIME)
-}
-
-function getFeatures() {
-  return getArrRandomValue(shuffleArray(FEATURES))
-}
-
-function getAdPhotos() {
-  return getArrRandomValue(PHOTOS)
-}
-
-export {
-  getLocationX, getLocationY, getAvatarNumber, getPrice, getType, getRoomCount, getGuestCount,
-  getCheckTime, getFeatures, getAdPhotos
-}
+export {createAds}
