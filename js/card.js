@@ -1,12 +1,12 @@
 
 import {createAds} from './data.js'
 
-const PHOTO_SIZE = {
-  width: '45',
-  height: '40',
-};
 const map = document.querySelector('#map-canvas');
 const adCardTemplate = document.querySelector('#card').content.querySelector('.popup');
+const PhotoSize = {
+  WIDTH: '45',
+  HEIGHT: '40',
+}
 const offerTypes = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -32,8 +32,8 @@ function getPhotosFragment(links) {
     const img = document.createElement('img');
     img.alt = 'Фотография жилья';
     img.classList.add('popup__photo')
-    img.width = PHOTO_SIZE.width;
-    img.height = PHOTO_SIZE.height;
+    img.width = PhotoSize.WIDTH;
+    img.height = PhotoSize.HEIGHT;
     photoListFragment.append(img);
     img.src = link;
   });

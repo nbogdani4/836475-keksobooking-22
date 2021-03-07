@@ -12,32 +12,32 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
-const LOCATION = {
-  'x': {
-    'min': 35.65000,
-    'max': 35.70000,
+const Location = {
+  'X': {
+    min: 35.65000,
+    max: 35.70000,
   },
-  'y': {
-    'min': 139.70000,
-    'max': 139.80000,
+  'Y': {
+    min: 139.70000,
+    max: 139.80000,
   },
 };
-const PRICE = {
-  'min': 1000,
-  'max': 10000,
+const Price = {
+  'MIN': 1000,
+  'MAX': 10000,
 };
-const ROOMS = {
-  'min': 2,
-  'max': 5,
+const Rooms = {
+  'MIN': 2,
+  'MAX': 5,
 };
-const GUESTS = {
-  'min': 5,
-  'max': 10,
+const Guests = {
+  'MIN': 5,
+  'MAX': 10,
 };
 
 function createAd() {
-  const locationX = genRandomFloatFromRange(LOCATION.x.min, LOCATION.x.max, NUMBER_COUNT_AFTER_POINT);
-  const locationY = genRandomFloatFromRange(LOCATION.y.min, LOCATION.y.max, NUMBER_COUNT_AFTER_POINT);
+  const locationX = genRandomFloatFromRange(Location.X.min, Location.X.max, NUMBER_COUNT_AFTER_POINT);
+  const locationY = genRandomFloatFromRange(Location.Y.min, Location.Y.max, NUMBER_COUNT_AFTER_POINT);
 
   return {
     'author': {
@@ -46,10 +46,10 @@ function createAd() {
     'offer': {
       'title': 'Выдуманный заголовок',
       'address': locationX + ', ' + locationY,
-      'price': genRandomIntFromRange(PRICE.min, PRICE.max),
+      'price': genRandomIntFromRange(Price.MIN, Price.MAX),
       'type': getRandomValue(TYPES),
-      'rooms': genRandomIntFromRange(ROOMS.min, ROOMS.max),
-      'guests': genRandomIntFromRange(GUESTS.min, GUESTS.max),
+      'rooms': genRandomIntFromRange(Rooms.MIN, Rooms.MAX),
+      'guests': genRandomIntFromRange(Guests.MIN, Guests.MAX),
       'checkin': getRandomValue(TIME),
       'checkout': getRandomValue(TIME),
       'features': getArrRandomValue(shuffleArray(FEATURES)),
