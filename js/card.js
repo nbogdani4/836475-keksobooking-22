@@ -54,4 +54,4 @@ adCardElement.querySelector('.popup__features').append(getFeaturesFragment(simil
 adCardElement.querySelector('.popup__description').textContent = similarAds.offer.description;
 adCardElement.querySelector('.popup__photos').textContent = ''
 adCardElement.querySelector('.popup__photos').append(getPhotosFragment(similarAds.offer.photos));
-map.appendChild(adCardElement);
+// map.appendChild(adCardElement);

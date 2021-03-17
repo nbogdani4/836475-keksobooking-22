@@ -23,15 +23,30 @@ function setTimeOut() {
   timeOut.value = timeIn.value;
 }
 
-document.querySelector('.ad-form').addEventListener('change', function(evt){
-  if (evt.target.id == 'type') {
-    setMinPrice(evt.target.value);
-  }
-  if (evt.target.id == 'timein') {
-    setTimeOut()
-  }
-  if (evt.target.id == 'timeout') {
-    setTimeIn()
-  }
+function onFormChange() {
+  adForm.addEventListener('change', (evt) => {
+    if (evt.target.id == 'type') {
+      setMinPrice(evt.target.value);
+    }
+    if (evt.target.id == 'timein') {
+      setTimeOut()
+    }
+    if (evt.target.id == 'timeout') {
+      setTimeIn()
+    }
 
-})
+  })
+}
+
+function disableFormElements() {
+  adForm.querySelectorAll('fieldset').forEach((el) => {
+    el.disabled = true;
+  })
+}
+
+function disableForm() {
+  disableFormElements();
+  adForm.classList.add('ad-form--disabled');
+}
+
+disableForm();
