@@ -44,9 +44,25 @@ function disableFormElements() {
   })
 }
 
+function activateFormElements() {
+  adForm.querySelectorAll('fieldset').forEach((el) => {
+    el.disabled = false;
+  })
+}
+
 function disableForm() {
   disableFormElements();
   adForm.classList.add('ad-form--disabled');
 }
 
+function activateForm() {
+  activateFormElements();
+  onFormChange();
+  adForm.classList.remove('ad-form--disabled');
+}
+
 disableForm();
+
+export{
+  activateForm
+}
