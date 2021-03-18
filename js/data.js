@@ -35,7 +35,16 @@ const Guests = {
   'MAX': 10,
 };
 
-function createAd() {
+const cityCenter = {
+  lat: 35.652832,
+  lng: 139.839478,
+}
+
+function getCityLatLng() {
+  return cityCenter
+}
+
+function createAdDataObject() {
   const locationX = genRandomFloatFromRange(Location.X.min, Location.X.max, NUMBER_COUNT_AFTER_POINT);
   const locationY = genRandomFloatFromRange(Location.Y.min, Location.Y.max, NUMBER_COUNT_AFTER_POINT);
 
@@ -63,6 +72,11 @@ function createAd() {
   };
 }
 
-const createAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
+function getAdDataList() {
+  return new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAdDataObject());
+}
 
-export {createAds}
+export {
+  getAdDataList,
+  getCityLatLng
+}

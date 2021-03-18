@@ -1,8 +1,12 @@
+import {getRoundedNumber} from './utils.js'
+import {getCityLatLng} from './data.js'
+
 const adForm = document.querySelector('.ad-form');
 const type = adForm.querySelector('#type');
 const price = adForm.querySelector('#price');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const address = adForm.querySelector('#address');
 const priceType = {
   bungalow: 0,
   flat: 1000,
@@ -21,6 +25,14 @@ function setTimeIn() {
 
 function setTimeOut() {
   timeOut.value = timeIn.value;
+}
+
+function setAddressReadonly() {
+  address.readOnly = true;
+}
+
+function setAddressValue(LatLngDict) {
+  address.value = `${getRoundedNumber(LatLngDict.lat, 5)}, ${getRoundedNumber(LatLngDict.lng, 5)}`;
 }
 
 function onFormChange() {
@@ -56,13 +68,16 @@ function disableForm() {
 }
 
 function activateForm() {
-  activateFormElements();
+  setAddressValue(getCityLatLng());
   onFormChange();
+  setAddressReadonly();
+  activateFormElements();
   adForm.classList.remove('ad-form--disabled');
 }
 
 disableForm();
 
 export{
-  activateForm
+  activateForm,
+  setAddressValue
 }
