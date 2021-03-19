@@ -1,7 +1,3 @@
-
-import {createAds} from './data.js'
-
-const map = document.querySelector('#map-canvas');
 const adCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const PhotoSize = {
   WIDTH: '45',
@@ -40,18 +36,23 @@ function getPhotosFragment(links) {
   return photoListFragment
 }
 
-const similarAds = createAds[0];
-const adCardElement = adCardTemplate.cloneNode(true);
-adCardElement.querySelector('.popup__avatar').src = similarAds.author.avatar;
-adCardElement.querySelector('.popup__title').textContent = similarAds.offer.title;
-adCardElement.querySelector('.popup__text--address').textContent = similarAds.offer.address;
-adCardElement.querySelector('.popup__text--price').textContent = similarAds.offer.price + ' ₽/ночь';
-adCardElement.querySelector('.popup__type').textContent = offerTypes[similarAds.offer.type];
-adCardElement.querySelector('.popup__text--capacity').textContent = similarAds.offer.rooms + ' комнаты для ' + similarAds.offer.guests + ' гостей.';
-adCardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarAds.offer.checkin + ', выезд до ' + similarAds.offer.checkout;
-adCardElement.querySelector('.popup__features').textContent = ''
-adCardElement.querySelector('.popup__features').append(getFeaturesFragment(similarAds.offer.features))
-adCardElement.querySelector('.popup__description').textContent = similarAds.offer.description;
-adCardElement.querySelector('.popup__photos').textContent = ''
-adCardElement.querySelector('.popup__photos').append(getPhotosFragment(similarAds.offer.photos));
-map.appendChild(adCardElement);
+function getCard(author, offer) {
+  const adCardElement = adCardTemplate.cloneNode(true);
+  adCardElement.querySelector('.popup__avatar').src = author.avatar;
+  adCardElement.querySelector('.popup__title').textContent = offer.title;
+  adCardElement.querySelector('.popup__text--address').textContent = offer.address;
+  adCardElement.querySelector('.popup__text--price').textContent = offer.price + ' ₽/ночь';
+  adCardElement.querySelector('.popup__type').textContent = offerTypes[offer.type];
+  adCardElement.querySelector('.popup__text--capacity').textContent = offer.rooms + ' комнаты для ' + offer.guests + ' гостей.';
+  adCardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
+  adCardElement.querySelector('.popup__features').textContent = ''
+  adCardElement.querySelector('.popup__features').append(getFeaturesFragment(offer.features))
+  adCardElement.querySelector('.popup__description').textContent = offer.description;
+  adCardElement.querySelector('.popup__photos').textContent = ''
+  adCardElement.querySelector('.popup__photos').append(getPhotosFragment(offer.photos));
+  return adCardElement
+}
+
+export {
+  getCard
+}

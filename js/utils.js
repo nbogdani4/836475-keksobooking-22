@@ -29,10 +29,18 @@ function shuffleArray(arr) {
   return arrCopy;
 }
 
+function getRoundedNumber(value, quantity) {
+  if (Number.isInteger(value)) {
+    return value.toFixed();
+  }
+  return value.toFixed(quantity);
+}
+
 export{
   genRandomIntFromRange,
   genRandomFloatFromRange,
   getRandomValue,
   getArrRandomValue,
-  shuffleArray
+  shuffleArray,
+  getRoundedNumber
 }
