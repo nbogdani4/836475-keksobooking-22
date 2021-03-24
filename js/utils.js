@@ -1,33 +1,6 @@
-function genRandomIntFromRange(min, max) {
-  if (min < 0 || max <= min) {
-    return new Error('Некорректно указан диапазон');
-  }
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const ALERT_SHOW_TIME = 7000;
+const ESC_KEYCODE = 27;
 
-function genRandomFloatFromRange(min, max, numbersAfterPoint) {
-  if (min < 0 || max <= min) {
-    return new Error('Некорректно указан диапазон');
-  }
-  return (Math.random() * (max - min) + min).toFixed(numbersAfterPoint);
-}
-
-function getRandomValue(arr) {
-  return arr[genRandomIntFromRange(0, arr.length - 1)];
-}
-
-function getArrRandomValue(arr) {
-  return arr.slice(0, genRandomIntFromRange(1, arr.length))
-}
-
-function shuffleArray(arr) {
-  const arrCopy = arr.slice();
-  for (let i = arrCopy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arrCopy[i], arrCopy[j]] = [arrCopy[j], arrCopy[i]];
-  }
-  return arrCopy;
-}
 
 function getRoundedNumber(value, quantity) {
   if (Number.isInteger(value)) {
@@ -36,11 +9,33 @@ function getRoundedNumber(value, quantity) {
   return value.toFixed(quantity);
 }
 
+function showAlert(message) {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '20px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+  alertContainer.style.color = '#ffffff';
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+}
+
+function isEscPressed(evt) {
+  return evt.keyCode === ESC_KEYCODE
+}
+
 export{
-  genRandomIntFromRange,
-  genRandomFloatFromRange,
-  getRandomValue,
-  getArrRandomValue,
-  shuffleArray,
-  getRoundedNumber
+  getRoundedNumber,
+  showAlert,
+  isEscPressed
 }
