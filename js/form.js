@@ -1,5 +1,7 @@
 import {getRoundedNumber} from './utils.js'
-import {getCityLatLng} from './data.js'
+import {sendData} from './api.js'
+import {showSuccessMessage, showErrorMessage} from './message.js'
+import {movePinTo} from './map.js'
 
 const adForm = document.querySelector('.ad-form');
 const type = adForm.querySelector('#type');
@@ -15,6 +17,14 @@ const priceType = {
   house: 5000,
   palace: 10000,
 };
+const defaultLatLng = {
+  lat: 35.652832,
+  lng: 139.839478,
+}
+
+function getDefaultLatLng() {
+  return defaultLatLng
+}
 
 function setMinPrice() {
   price.placeholder = priceType[type.value];
@@ -55,8 +65,8 @@ function setAddressReadonly() {
   address.readOnly = true;
 }
 
-function setAddressValue(LatLngDict) {
-  address.value = `${getRoundedNumber(LatLngDict.lat, 5)}, ${getRoundedNumber(LatLngDict.lng, 5)}`;
+function setAddressValue({lat, lng}) {
+  address.value = `${getRoundedNumber(lat, 5)}, ${getRoundedNumber(lng, 5)}`;
 }
 
 function onFormChange() {
@@ -76,9 +86,29 @@ function onFormChange() {
     if (evt.target.id === 'timeout') {
       setTimeIn()
     }
-
   })
 }
+
+function isSuccess() {
+  showSuccessMessage();
+  resetForm();
+}
+
+function onFormSubmit() {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(isSuccess, showErrorMessage, new FormData(evt.target));
+  })
+}
+
+function onFormReset() {
+  const resetBtn = adForm.querySelector('.ad-form__reset');
+  resetBtn.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetForm();
+  })
+}
+
 
 function disableFormElements() {
   adForm.querySelectorAll('fieldset').forEach((el) => {
@@ -92,24 +122,34 @@ function activateFormElements() {
   })
 }
 
+function resetForm() {
+  adForm.reset();
+  setAddressValue(defaultLatLng);
+  movePinTo(defaultLatLng)
+}
+
 function disableForm() {
-  disableFormElements();
   adForm.classList.add('ad-form--disabled');
+  disableFormElements();
 }
 
 function activateForm() {
-  setAddressValue(getCityLatLng());
+  adForm.classList.remove('ad-form--disabled');
+  setAddressValue(defaultLatLng);
   setMinPrice();
   setCapacityValue();
   onFormChange();
+  onFormReset()
   setAddressReadonly();
   activateFormElements();
-  adForm.classList.remove('ad-form--disabled');
 }
 
+
 disableForm();
+onFormSubmit();
 
 export{
   activateForm,
-  setAddressValue
+  setAddressValue,
+  getDefaultLatLng
 }
