@@ -1,16 +1,27 @@
 /* global L:readonly */
 import {activateForm, setAddressValue, getDefaultLatLng} from './form.js'
+import {activateFilter, filtrateAds, updatePinsRendering} from './filter.js'
 import {getCard} from './card.js'
 import {getData} from './api.js'
 
-const zoom = 10;
+const ZOOM = 10;
+const PinIconUrl = {
+  MAIN: './img/main-pin.svg',
+  OTHER: './img/pin.svg',
+}
+const PinIconSize = {
+  WIDTH: 52,
+  HEIGHT: 52,
+}
+const PinIconAnchor = {
+  X: 26,
+  Y: 52,
+}
 
 // map
 const map = L.map('map-canvas')
-  .on('load', () => {
-    activateForm();
-  })
-  .setView(getDefaultLatLng(), zoom);
+  .on('load', activateForm)
+  .setView(getDefaultLatLng(), ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -22,9 +33,9 @@ L.tileLayer(
 
 // main pin
 const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: PinIconUrl.MAIN,
+  iconSize: [PinIconSize.WIDTH, PinIconSize.HEIGHT],
+  iconAnchor: [PinIconAnchor.X, PinIconAnchor.Y],
 });
 
 const mainPin = L.marker(
@@ -54,10 +65,19 @@ getMainPin().addTo(map);
 
 
 // other pins
+let pins = [];
+
+function destroyPin(pinsList) {
+  pinsList.forEach((pin) => {
+    pin.remove();
+  })
+  pins = [];
+}
+
 const pinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: PinIconUrl.OTHER,
+  iconSize: [PinIconSize.WIDTH, PinIconSize.HEIGHT],
+  iconAnchor: [PinIconAnchor.X, PinIconAnchor.Y],
 });
 
 function getPinMarker(location) {
@@ -70,21 +90,29 @@ function getPinMarker(location) {
 }
 
 function renderPins(ads) {
-  ads.forEach(({author, offer, location}) => {
-    getPinMarker(location)
-      .addTo(map)
-      .bindPopup(
-        getCard(author, offer),
-        {
-          keepInView: true,
-        },
-      )
-  });
+  destroyPin(pins);
+  ads
+    .filter(filtrateAds)
+    .forEach(({author, offer, location}) => {
+      const pin = getPinMarker(location);
+      pin
+        .addTo(map)
+        .bindPopup(
+          getCard(author, offer),
+          {
+            keepInView: true,
+          },
+        );
+      pins.push(pin);
+    });
+  activateFilter();
 }
 
 getData((ads) => {
   renderPins(ads);
+  updatePinsRendering(() => renderPins(ads));
 })
+
 
 export {
   movePinTo

@@ -2,6 +2,7 @@ import {getRoundedNumber} from './utils.js'
 import {sendData} from './api.js'
 import {showSuccessMessage, showErrorMessage} from './message.js'
 import {movePinTo} from './map.js'
+import {resetFilter} from './filter.js'
 
 const adForm = document.querySelector('.ad-form');
 const type = adForm.querySelector('#type');
@@ -21,6 +22,9 @@ const defaultLatLng = {
   lat: 35.652832,
   lng: 139.839478,
 }
+const ROOM_COUNT_MAX = 100;
+const LENGTH_AFTER_POINT = 5;
+
 
 function getDefaultLatLng() {
   return defaultLatLng
@@ -34,8 +38,8 @@ function setMinPrice() {
 function setCapacityValue() {
   capacity.querySelectorAll('option').forEach((option) => {
     if (
-      (+roomNumber.value === 100 && +option.value === 0) ||
-      (+roomNumber.value !== 100 && +roomNumber.value >= +option.value && +option.value !== 0)
+      (+roomNumber.value === ROOM_COUNT_MAX && +option.value === 0) ||
+      (+roomNumber.value !== ROOM_COUNT_MAX && +roomNumber.value >= +option.value && +option.value !== 0)
     ) {
       option.disabled = false;
     } else {
@@ -66,7 +70,7 @@ function setAddressReadonly() {
 }
 
 function setAddressValue({lat, lng}) {
-  address.value = `${getRoundedNumber(lat, 5)}, ${getRoundedNumber(lng, 5)}`;
+  address.value = `${getRoundedNumber(lat, LENGTH_AFTER_POINT)}, ${getRoundedNumber(lng, LENGTH_AFTER_POINT)}`;
 }
 
 function onFormChange() {
@@ -124,8 +128,9 @@ function activateFormElements() {
 
 function resetForm() {
   adForm.reset();
-  setAddressValue(defaultLatLng);
-  movePinTo(defaultLatLng)
+  setAddressValue(getDefaultLatLng());
+  movePinTo(getDefaultLatLng())
+  resetFilter();
 }
 
 function disableForm() {
@@ -135,7 +140,7 @@ function disableForm() {
 
 function activateForm() {
   adForm.classList.remove('ad-form--disabled');
-  setAddressValue(defaultLatLng);
+  setAddressValue(getDefaultLatLng());
   setMinPrice();
   setCapacityValue();
   onFormChange();
