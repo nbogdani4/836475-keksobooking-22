@@ -1,10 +1,12 @@
+/* global _:readonly */
 /* global L:readonly */
 import {activateForm, setAddressValue, getDefaultLatLng} from './form.js'
-import {activateFilter, filtrateAds, updatePinsRendering} from './filter.js'
+import {activateFilter, getFilteredAds, onFilterChange} from './filter.js'
 import {getCard} from './card.js'
 import {getData} from './api.js'
 
 const ZOOM = 10;
+const FILTER_DELAY = 500;
 const PinIconUrl = {
   MAIN: './img/main-pin.svg',
   OTHER: './img/pin.svg',
@@ -92,7 +94,7 @@ function getPinMarker(location) {
 function renderPins(ads) {
   destroyPin(pins);
   ads
-    .filter(filtrateAds)
+    .filter(getFilteredAds)
     .forEach(({author, offer, location}) => {
       const pin = getPinMarker(location);
       pin
@@ -110,7 +112,7 @@ function renderPins(ads) {
 
 getData((ads) => {
   renderPins(ads);
-  updatePinsRendering(() => renderPins(ads));
+  onFilterChange(_.debounce(() => renderPins(ads), FILTER_DELAY));
 })
 
 

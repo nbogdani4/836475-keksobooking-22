@@ -32,13 +32,18 @@ function activateFilter() {
 disableFilter();
 
 
-function updatePinsRendering(cb) {
+function onFilterChange(cb) {
   filter.addEventListener('change', cb)
+}
+
+function dispatchFilterEvent(evtType) {
+  const event = new Event(evtType);
+  filter.dispatchEvent(event);
 }
 
 function filtrateByHousingType(ad) {
   const housingTypeFilter = filter.querySelector('#housing-type');
-  return housingTypeFilter.value === 'any' || ad.offer.type === housingTypeFilter.value;
+  return housingTypeFilter.value === 'any' || housingTypeFilter.value === ad.offer.type;
 }
 
 function filtrateByHousingPrice(ad) {
@@ -54,13 +59,36 @@ function filtrateByHousingPrice(ad) {
   return housingPriceFilter.value === 'any' || housingPriceFilter.value === adPrice;
 }
 
-function filtrateAds(ad) {
-  return filtrateByHousingType(ad) && filtrateByHousingPrice(ad);
+function filtrateByHousingRooms(ad) {
+  const housingRoomFilter = filter.querySelector('#housing-rooms');
+  return housingRoomFilter.value === 'any' || Number(housingRoomFilter.value) === ad.offer.rooms;
+}
+
+function filtrateByHousingGuests(ad) {
+  const housingGuestFilter = filter.querySelector('#housing-guests');
+  return housingGuestFilter.value === 'any' || Number(housingGuestFilter.value) === ad.offer.guests;
+}
+
+function filtrateByHousingFeatures(ad) {
+  const housingFeaturesFilters = Array.from(filter.querySelectorAll('.map__checkbox:checked'));
+
+  return housingFeaturesFilters.every((filterItem) => {
+    return ad.offer.features.includes(filterItem.value);
+  });
+}
+
+function getFilteredAds(ad) {
+  return filtrateByHousingType(ad) &&
+    filtrateByHousingPrice(ad) &&
+    filtrateByHousingRooms(ad) &&
+    filtrateByHousingGuests(ad) &&
+    filtrateByHousingFeatures(ad);
 }
 
 export{
   activateFilter,
   resetFilter,
-  filtrateAds,
-  updatePinsRendering
+  getFilteredAds,
+  onFilterChange,
+  dispatchFilterEvent
 }

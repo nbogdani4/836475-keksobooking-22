@@ -2,7 +2,7 @@ import {getRoundedNumber} from './utils.js'
 import {sendData} from './api.js'
 import {showSuccessMessage, showErrorMessage} from './message.js'
 import {movePinTo} from './map.js'
-import {resetFilter} from './filter.js'
+import {resetFilter, dispatchFilterEvent} from './filter.js'
 
 const adForm = document.querySelector('.ad-form');
 const type = adForm.querySelector('#type');
@@ -110,6 +110,7 @@ function onFormReset() {
   resetBtn.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
+
   })
 }
 
@@ -131,6 +132,7 @@ function resetForm() {
   setAddressValue(getDefaultLatLng());
   movePinTo(getDefaultLatLng())
   resetFilter();
+  dispatchFilterEvent('change');
 }
 
 function disableForm() {
