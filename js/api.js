@@ -1,11 +1,10 @@
 import {showAlert} from './utils.js'
-const ADS_MAX_COUNT = 10;
 const Url = {
   GET_DATA: 'https://22.javascript.pages.academy/keksobooking/data',
   POST_DATA: 'https://22.javascript.pages.academy/keksobooking',
 }
 
-async function getData(onSuccess) {
+function getData(onSuccess) {
   fetch(Url.GET_DATA)
     .then((response) => {
       if (response.ok) {
@@ -13,7 +12,7 @@ async function getData(onSuccess) {
       }
       throw new Error('Не удалось загрузить данные с сервера. Попробуйте позже.');
     })
-    .then((ads) => onSuccess(ads.slice(0, ADS_MAX_COUNT)))
+    .then((ads) => onSuccess(ads))
     .catch((err) => showAlert(err));
 }
 

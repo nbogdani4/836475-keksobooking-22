@@ -18,16 +18,16 @@ const priceType = {
   house: 5000,
   palace: 10000,
 };
-const defaultLatLng = {
-  lat: 35.652832,
-  lng: 139.839478,
+const DefaultLatLng = {
+  LAT: 35.652832,
+  LNG: 139.839478,
 }
 const ROOM_COUNT_MAX = 100;
 const LENGTH_AFTER_POINT = 5;
 
 
 function getDefaultLatLng() {
-  return defaultLatLng
+  return {'lat': DefaultLatLng.LAT, 'lng': DefaultLatLng.LNG}
 }
 
 function setMinPrice() {
@@ -75,20 +75,22 @@ function setAddressValue({lat, lng}) {
 
 function onFormChange() {
   adForm.addEventListener('change', (evt) => {
-    if (evt.target.id === 'type') {
-      setMinPrice();
-    }
-    if (evt.target.id === 'room_number') {
-      setCapacityValue();
-    }
-    if (evt.target.id === 'capacity') {
-      checkCapacityToValidity()
-    }
-    if (evt.target.id === 'timein') {
-      setTimeOut()
-    }
-    if (evt.target.id === 'timeout') {
-      setTimeIn()
+    switch (evt.target.id) {
+      case 'type':
+        setMinPrice();
+        break;
+      case 'room_number':
+        setCapacityValue();
+        break;
+      case 'capacity':
+        checkCapacityToValidity()
+        break;
+      case 'timein':
+        setTimeOut()
+        break;
+      case 'timeout':
+        setTimeIn()
+        break;
     }
   })
 }

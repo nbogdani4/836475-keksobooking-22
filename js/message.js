@@ -15,7 +15,6 @@ function hideSuccessMessage(evt) {
 
 function showSuccessMessage() {
   const successMessage = successTemplate.cloneNode(true);
-  successMessage.style.zIndex = 9999;
   page.append(successMessage);
   successMessage.addEventListener('click', hideSuccessMessage);
   document.addEventListener('keydown', hideSuccessMessage);
@@ -38,7 +37,6 @@ function showErrorMessage() {
   const errorMessage = errorTemplate.cloneNode(true);
   const closeBtn = errorMessage.querySelector('.error__button');
 
-  errorMessage.style.zIndex = 9999;
   page.append(errorMessage)
   closeBtn.addEventListener('click', hideErrorMessage);
   errorMessage.addEventListener('click', hideErrorMessage);

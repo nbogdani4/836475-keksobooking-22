@@ -93,8 +93,7 @@ function getPinMarker(location) {
 
 function renderPins(ads) {
   destroyPin(pins);
-  ads
-    .filter(getFilteredAds)
+  getFilteredAds(ads)
     .forEach(({author, offer, location}) => {
       const pin = getPinMarker(location);
       pin
@@ -114,7 +113,6 @@ getData((ads) => {
   renderPins(ads);
   onFilterChange(_.debounce(() => renderPins(ads), FILTER_DELAY));
 })
-
 
 export {
   movePinTo

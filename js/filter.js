@@ -1,5 +1,12 @@
 const PRICE_UNTIL = 10000;
 const PRICE_FROM = 50000;
+const MAX_ADS_COUNT = 10;
+const FilterValue = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high',
+  ALL: 'any',
+}
 
 const filter = document.querySelector('.map__filters');
 
@@ -43,30 +50,30 @@ function dispatchFilterEvent(evtType) {
 
 function filtrateByHousingType(ad) {
   const housingTypeFilter = filter.querySelector('#housing-type');
-  return housingTypeFilter.value === 'any' || housingTypeFilter.value === ad.offer.type;
+  return housingTypeFilter.value === FilterValue.ALL || housingTypeFilter.value === ad.offer.type;
 }
 
 function filtrateByHousingPrice(ad) {
   const housingPriceFilter = filter.querySelector('#housing-price');
   let adPrice = '';
   if (ad.offer.price < PRICE_UNTIL) {
-    adPrice = 'low';
+    adPrice = FilterValue.LOW;
   } else if (ad.offer.price >= PRICE_UNTIL && ad.offer.price < PRICE_FROM) {
-    adPrice = 'middle';
+    adPrice = FilterValue.MIDDLE;
   } else {
-    adPrice = 'high'
+    adPrice = FilterValue.HIGH;
   }
-  return housingPriceFilter.value === 'any' || housingPriceFilter.value === adPrice;
+  return housingPriceFilter.value === FilterValue.ALL || housingPriceFilter.value === adPrice;
 }
 
 function filtrateByHousingRooms(ad) {
   const housingRoomFilter = filter.querySelector('#housing-rooms');
-  return housingRoomFilter.value === 'any' || Number(housingRoomFilter.value) === ad.offer.rooms;
+  return housingRoomFilter.value === FilterValue.ALL || Number(housingRoomFilter.value) === ad.offer.rooms;
 }
 
 function filtrateByHousingGuests(ad) {
   const housingGuestFilter = filter.querySelector('#housing-guests');
-  return housingGuestFilter.value === 'any' || Number(housingGuestFilter.value) === ad.offer.guests;
+  return housingGuestFilter.value === FilterValue.ALL || Number(housingGuestFilter.value) === ad.offer.guests;
 }
 
 function filtrateByHousingFeatures(ad) {
@@ -77,12 +84,22 @@ function filtrateByHousingFeatures(ad) {
   });
 }
 
-function getFilteredAds(ad) {
-  return filtrateByHousingType(ad) &&
-    filtrateByHousingPrice(ad) &&
-    filtrateByHousingRooms(ad) &&
-    filtrateByHousingGuests(ad) &&
-    filtrateByHousingFeatures(ad);
+function getFilteredAds(ads) {
+  let filteredAds = [];
+  for (let i=0; i < ads.length; i++) {
+
+    if (
+      filtrateByHousingType(ads[i]) && filtrateByHousingPrice(ads[i]) &&
+      filtrateByHousingRooms(ads[i]) && filtrateByHousingGuests(ads[i]) &&
+      filtrateByHousingFeatures(ads[i])
+    ) {
+      filteredAds.push(ads[i]);
+      if (filteredAds.length >= MAX_ADS_COUNT) {
+        break;
+      }
+    }
+  }
+  return filteredAds
 }
 
 export{
